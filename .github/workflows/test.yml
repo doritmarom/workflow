@@ -1,0 +1,25 @@
+name: Pass Variables Between Jobs
+
+on:
+  push:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      my_output: ${{ steps.set_output.outputs.result }}
+    steps:
+      - name: Set output variable
+        id: set_output
+        run: echo "::set-output name=result::Hello from Job 1"
+        # Note: Replace `::set-output` with `$GITHUB_ENV` if necessary
+        # Example for GITHUB_ENV:
+        # run: echo "my_output=Hello from Job 1" >> $GITHUB_ENV
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1
+    steps:
+      - name: Use output from job1
+        run: echo "Job 1 said: ${{ needs.job1.outputs.my_output }}"
+
