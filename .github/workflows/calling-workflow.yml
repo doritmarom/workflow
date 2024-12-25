@@ -1,0 +1,44 @@
+name: Calling Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-other:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Another Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = 'your-org-or-user';
+            const repo = 'your-repo';
+            const workflowId = 'triggered-workflow.yml'; // Workflow file name
+            const githubToken = process.env.GITHUB_TOKEN;
+
+            const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowId}/dispatches`;
+
+            const data = {
+              ref: 'main', // Branch for triggered workflow
+              inputs: {
+                environment: 'staging', // Pass environment value
+                version: 'v1.0.0'       // Pass version value
+              }
+            };
+
+            const axios = require('axios');
+
+            axios.post(url, data, {
+              headers: {
+                Authorization: `Bearer ${githubToken}`,
+                Accept: 'application/vnd.github.v3+json'
+              }
+            }).then(response => {
+              console.log('Triggered workflow successfully:', response.data);
+            }).catch(error => {
+              console.error('Error triggering workflow:', error.message);
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
