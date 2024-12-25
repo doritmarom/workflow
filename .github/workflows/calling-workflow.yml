@@ -1,17 +1,17 @@
 name: Calling reusable workflow
 on:
     workflow_dispatch:
-    inputs:
-      confirmation:
-        type: boolean
-        description: "Please confirm that you need to set the HTML page after this pipeline runs manually"
-        required: true
-      environment:
-        type: choice
-        description: "Select deployment environment"
-        options:
-          - staging
-          - production
+      inputs:
+        confirmation:
+          type: boolean
+          description: "Please confirm that you need to set the HTML page after this pipeline runs manually"
+          required: true
+        environment:
+          type: choice
+          description: "Select deployment environment"
+          options:
+            - staging
+            - production
 jobs:
   call-workflow:
     uses: ./.github/workflows/reusable-workflow1.yaml
