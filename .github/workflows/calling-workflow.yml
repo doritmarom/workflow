@@ -14,5 +14,5 @@ on:
             - production
 jobs:
   call-workflow:
-    uses: ./.github/workflows/triggered-workflow.yaml
+    uses: ./.github/workflows/triggered-workflow.yml
     secrets: inherit
