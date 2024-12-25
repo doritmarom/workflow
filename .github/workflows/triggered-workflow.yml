@@ -1,27 +1,33 @@
-name: Triggered Workflow
-
+name: Reusable Workflow
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       environment:
-        description: "Select the environment to deploy to"
+        description: "Deployment environment"
         required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        type: boolean
+        description: "Please confirm that you need to set the HTML page after this pipeline runs manually"
+        required: true
+      environment:
         type: choice
+        description: "Select deployment environment"
         options:
-          - development
           - staging
           - production
-        default: development
-      version:
-        description: "Application version to deploy"
-        required: true
-        default: "latest"
+
+env:
+  GITHUB_RUN_ID: $GITHUB_RUN_ID
 
 jobs:
-  deploy:
+  log-the-inputs:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Inputs
-        run: |
-          echo "Environment: ${{ github.event.inputs.environment }}"
-          echo "Version: ${{ github.event.inputs.version }}"
+      - run: |
+          echo "env: $env"
+          echo "GitHub Run ID: $GITHUB_RUN_ID"
+        env:
+          env: ${{ inputs.environment }}
