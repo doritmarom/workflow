@@ -12,6 +12,10 @@ on:
           options:
             - staging
             - production
+        trigger:
+          type: boolean
+          description: "Do you want to trigger publish? check for Yes"
+          
 jobs:
   call-workflow:
     uses: ./.github/workflows/triggered-workflow.yml
